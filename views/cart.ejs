@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Your Cart - Grocery Shop</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Your Cart</h2>
+      <a href="/dashboard">⬅ Back</a> | <a href="/logout">Logout</a>
+      <ul>
+        <% cart.forEach(item => { %>
+        <li><%= item.name %> - ₹<%= item.price %></li>
+        <% }) %>
+      </ul>
+      <h3>Total: ₹<%= total %></h3>
+    </div>
+  </body>
+</html>
