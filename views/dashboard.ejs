@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard - Grocery Shop</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Available Groceries</h2>
+      <a href="/cart">🛒 View Cart</a> | <a href="/logout">Logout</a>
+      <ul>
+        <% groceries.forEach(item => { %>
+        <li>
+          <%= item.name %> - ₹<%= item.price %>
+          <a href="/add-to-cart/<%= item.id %>">Add to cart</a>
+        </li>
+        <% }) %>
+      </ul>
+    </div>
+  </body>
+</html>
