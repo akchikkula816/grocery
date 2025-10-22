@@ -1,0 +1,29 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+}
+.container {
+  width: 400px;
+  margin: 60px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ccc;
+}
+h2 {
+  text-align: center;
+}
+input,
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+}
+.error {
+  color: red;
+  text-align: center;
+}
+a {
+  text-decoration: none;
+}

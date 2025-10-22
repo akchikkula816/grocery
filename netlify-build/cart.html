@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Your Grocery Cart</h2>
+        <ul>
+            {% for item in items %}
+                <li>{{ item.item_name }} - Quantity: {{ item.quantity }}</li>
+            {% endfor %}
+        </ul>
+        <a href="/home">Add More Items</a> | <a href="/logout">Logout</a>
+    </div>
+</body>
+</html>
