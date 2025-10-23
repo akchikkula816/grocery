@@ -8,6 +8,12 @@ pipeline {
   }
 
   stages {
+    stage('Clean Workspace') {
+      steps {
+        deleteDir() // Clears workspace to avoid permission issues
+      }
+    }
+
     stage('Install Dependencies') {
       steps {
         sh 'npm install'
@@ -48,6 +54,4 @@ pipeline {
     }
   }
 }
-
-
 
