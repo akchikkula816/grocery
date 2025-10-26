@@ -1,20 +1,17 @@
-# Use an official Node.js image as the base
 FROM node:18
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json (for better caching)
+# Copy package files first
 COPY package*.json ./
 
-# Install only production dependencies
+# Install dependencies inside container
 RUN npm install --production
 
-# Copy all project files into the container
+# Copy rest of the code
 COPY . .
 
-# Expose the app port (Heroku and most environments use 3000)
-EXPOSE 3000
+# Expose port 80
+EXPOSE 80
 
-# Command to start the application
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
