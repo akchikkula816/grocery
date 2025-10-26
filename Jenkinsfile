@@ -1,51 +1,57 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    HEROKU_API_KEY = credentials('HEROKU_ID') // Jenkins credential ID for your Heroku API key
-    HEROKU_EMAIL = 'anilkumarchikkula2000@gmail.com'
-    HEROKU_APP_NAME = 'grocery-app-2025'
-  }
-
-  stages {
-    stage('Install Dependencies') {
-      steps {
-        sh 'npm install'
-      }
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('DOCKER_ID') // Docker Hub Jenkins credential ID
+        IMAGE_NAME = "akchikkula816/grocery-app"
+        CONTAINER_NAME = "grocery-app-container"
+        HOST_PORT = "8080"
+        CONTAINER_PORT = "80"
     }
 
-    stage('Build') {
-      steps {
-        sh 'npm run build || echo "No build script, skipping..."'
-      }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/akchikkula816/grocery.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t ${IMAGE_NAME}:latest ."
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    sh """
+                    echo "$DOCKER_HUB_CREDENTIALS_PSW" | docker login -u "$DOCKER_HUB_CREDENTIALS_USR" --password-stdin
+                    docker push ${IMAGE_NAME}:latest
+                    docker logout
+                    """
+                }
+            }
+        }
+
+        stage('Deploy Container on EC2') {
+            steps {
+                script {
+                    sh "docker rm -f ${CONTAINER_NAME} || true"
+                    sh "docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} ${IMAGE_NAME}:latest"
+                }
+            }
+        }
     }
 
-    stage('Start Server') {
-      steps {
-        sh 'node server.js &'
-      }
+    post {
+        success {
+            echo "✅ Docker image pushed and container deployed successfully!"
+        }
+        failure {
+            echo "❌ Pipeline failed. Check logs."
+        }
     }
-
-    stage('Deploy to Heroku') {
-      steps {
-        sh '''
-          echo "machine api.heroku.com login $HEROKU_EMAIL password $HEROKU_API_KEY" > ~/.netrc
-          echo "machine git.heroku.com login $HEROKU_EMAIL password $HEROKU_API_KEY" >> ~/.netrc
-          chmod 600 ~/.netrc
-          git remote add heroku https://git.heroku.com/$HEROKU_APP_NAME.git || true
-          git push heroku main --force
-        '''
-      }
-    }
-  }
-
-  post {
-    success {
-      echo '✅ Deployment to Heroku successful!'
-    }
-    failure {
-      echo '❌ Deployment failed. Check logs for details.'
-    }
-  }
 }
-        
