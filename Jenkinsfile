@@ -5,7 +5,7 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = credentials('DOCKER_ID') // Docker Hub Jenkins credential ID
         IMAGE_NAME = "akchikkula816/grocery-app"
         CONTAINER_NAME = "grocery-app-container"
-        HOST_PORT = "8080"
+        HOST_PORT = "8081"
         CONTAINER_PORT = "80"
     }
 
